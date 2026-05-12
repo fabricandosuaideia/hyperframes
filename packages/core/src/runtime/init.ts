@@ -1243,7 +1243,7 @@ export function initSandboxRuntimeModular(): void {
       mediaEl.addEventListener("durationchange", scheduleMetadataDurationHydration);
     }
 
-    if (newElementsBound) {
+    if (newElementsBound && !isRenderMode) {
       mediaPreloader.refresh();
     }
 
