@@ -258,6 +258,8 @@ jobs:
           fi
 
           # Load the studio in headless Chrome and capture console errors
+          # puppeteer is a dependency of @hyperframes/producer; resolve from there
+          cd packages/producer
           node --input-type=module <<'SMOKE_EOF'
           import puppeteer from "puppeteer";
           const browser = await puppeteer.launch({
