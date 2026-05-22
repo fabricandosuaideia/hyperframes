@@ -407,6 +407,16 @@ export function useTimelinePlayer() {
         if (usePlayerStore.getState().isPlaying) setIsPlaying(false);
         shuttleDirectionRef.current = null;
         shuttleSpeedIndexRef.current = 0;
+        try {
+          const doc = iframeRef.current?.contentDocument;
+          if (doc) {
+            for (const el of doc.querySelectorAll("video, audio")) {
+              (el as HTMLMediaElement).pause();
+            }
+          }
+        } catch {
+          /* cross-origin */
+        }
       }
       return true;
     },
