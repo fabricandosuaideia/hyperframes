@@ -10,12 +10,17 @@
     "height": 1080
   },
   "duration": 8,
-  "tags": ["liquid-glass-html-in-canvas", "webgpu"],
+  "tags": ["html-in-canvas", "liquid-glass-html-in-canvas", "webgpu"],
   "files": [
     {
       "path": "liquid-glass-notification.html",
       "target": "compositions/liquid-glass-notification.html",
       "type": "hyperframes:composition"
+    },
+    {
+      "path": "assets/hyperframes-logo-dark.svg",
+      "target": "compositions/assets/hyperframes-logo-dark.svg",
+      "type": "registry:asset"
     }
   ],
   "preview": {

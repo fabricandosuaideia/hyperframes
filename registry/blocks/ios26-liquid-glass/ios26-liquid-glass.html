@@ -25,6 +25,197 @@
         overflow: hidden;
         background: #050508;
       }
+      .ios-home {
+        display: flex;
+        flex-direction: column;
+        height: 844px;
+        background:
+          radial-gradient(circle at 20% 10%, rgba(126, 87, 255, 0.32), transparent 28%),
+          radial-gradient(circle at 82% 20%, rgba(0, 199, 255, 0.28), transparent 26%),
+          radial-gradient(circle at 50% 86%, rgba(255, 126, 80, 0.24), transparent 28%),
+          linear-gradient(145deg, #070811 0%, #101421 46%, #05070d 100%);
+      }
+      .ios-app-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px 6px;
+        padding: 8px 18px 4px;
+      }
+      .ios-app {
+        position: relative;
+        text-align: center;
+      }
+      .ios-app-icon,
+      .ios-dock-icon {
+        display: block;
+        object-fit: cover;
+        box-shadow:
+          0 8px 20px rgba(0, 0, 0, 0.34),
+          inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      }
+      .ios-app-icon {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 3px;
+        border-radius: 15px;
+      }
+      .ios-app-label {
+        color: rgba(255, 255, 255, 0.76);
+        font-size: 9px;
+        line-height: 1.1;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+        white-space: nowrap;
+      }
+      .ios-badge {
+        position: absolute;
+        top: -3px;
+        right: 2px;
+        min-width: 13px;
+        padding: 1px 4px;
+        border-radius: 8px;
+        background: #ff3b30;
+        color: #fff;
+        font-size: 7px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.32);
+      }
+      .ios-search-pill {
+        justify-self: center;
+        width: 104px;
+        padding: 7px 0;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: rgba(255, 255, 255, 0.56);
+        font-size: 12px;
+        font-weight: 500;
+        text-align: center;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      }
+      .ios-liquid-stack {
+        flex: 1;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 8px;
+        padding: 6px 16px 8px;
+      }
+      .ios-glass-card {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08)),
+          rgba(28, 35, 52, 0.48);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.34),
+          0 14px 36px rgba(0, 0, 0, 0.28);
+      }
+      .ios-glass-notification {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 58px;
+        padding: 9px 11px;
+        border-radius: 22px;
+      }
+      .ios-glass-notification img {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        object-fit: cover;
+        flex: 0 0 auto;
+      }
+      .ios-notification-copy {
+        min-width: 0;
+        flex: 1;
+      }
+      .ios-notification-title {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 11px;
+        font-weight: 750;
+      }
+      .ios-notification-body {
+        margin-top: 2px;
+        color: rgba(255, 255, 255, 0.64);
+        font-size: 10px;
+        line-height: 1.25;
+      }
+      .ios-widget-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .ios-widget {
+        min-height: 82px;
+        padding: 11px 12px;
+        border-radius: 24px;
+      }
+      .ios-widget-label {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+      }
+      .ios-widget-value {
+        margin-top: 5px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 820;
+        line-height: 1;
+      }
+      .ios-widget-caption {
+        margin-top: 6px;
+        color: rgba(255, 255, 255, 0.62);
+        font-size: 10px;
+        line-height: 1.2;
+      }
+      .ios-control-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 7px;
+        min-height: 52px;
+        padding: 8px;
+        border-radius: 24px;
+      }
+      .ios-toggle {
+        display: grid;
+        place-items: center;
+        min-height: 36px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.84);
+        font-size: 15px;
+        font-weight: 820;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      }
+      .ios-toggle.active {
+        background: linear-gradient(135deg, rgba(88, 166, 255, 0.9), rgba(52, 211, 153, 0.72));
+      }
+      .ios-dock {
+        display: flex;
+        justify-content: space-around;
+        margin: 0 12px 12px;
+        padding: 8px 12px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.18),
+          0 14px 36px rgba(0, 0, 0, 0.24);
+      }
+      .ios-dock-item {
+        position: relative;
+        width: 52px;
+        height: 52px;
+      }
+      .ios-dock-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 13px;
+      }
     </style>
   </head>
   <body>
@@ -63,38 +254,132 @@
             color: #e2e8f0;
           "
         >
-          <div id="phone-scroll" style="background:#0a0a0f;color:#fff;transform:translateY(0)">
-            <div id="phone-title" style="display:none"></div><span id="phone-count" style="display:none"></span><div id="phone-cards" style="display:none"></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 22px 6px;font-size:14px;font-weight:700;"><span style="font-variant-numeric:tabular-nums;">15:16</span><div style="display:flex;gap:5px;align-items:center;font-size:11px;"><span>●●●●</span><span>📶</span><span style="color:#30d158;font-weight:600;">92%🔋</span></div></div>
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;padding:10px 18px;">
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">☁</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Weather</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">📈</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Stocks</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">📡</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Find My</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">🏠</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Home</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">📖</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Books</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">⭐</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">iTunes</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">⊙</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Fitness</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">⏱</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Watch</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">👤</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Contacts</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">📁</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Files</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">文A</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Translate</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">⚙</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Utilities</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">✦</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">ChatGPT</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;">#</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Slack</div></div>
-              <div style="text-align:center;position:relative"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">📷</div><div style="position:absolute;top:-2px;right:4px;background:#FF3B30;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:7px;">1</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Instagram</div></div>
-              <div style="text-align:center;position:relative"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;">𝕏</div><div style="position:absolute;top:-2px;right:4px;background:#FF3B30;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:7px;">4</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">X</div></div>
-              <div style="text-align:center;position:relative"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:24px;">✉</div><div style="position:absolute;top:-2px;right:0;background:#FF3B30;color:#fff;font-size:7px;font-weight:700;padding:1px 3px;border-radius:7px;font-variant-numeric:tabular-nums;">797</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Proton</div></div>
-              <div style="text-align:center;position:relative"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;">M</div><div style="position:absolute;top:-2px;right:-2px;background:#FF3B30;color:#fff;font-size:6px;font-weight:700;padding:1px 3px;border-radius:7px;font-variant-numeric:tabular-nums;">31.889</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Gmail</div></div>
-              <div style="text-align:center"><div style="width:62px;height:62px;margin:0 auto 3px;border-radius:15px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;">R</div><div style="font-size:9px;color:rgba(255,255,255,0.7);">Revolut</div></div>
+          <div id="phone-scroll" class="ios-home" style="color: #fff; transform: translateY(0)">
+            <div id="phone-title" style="display: none"></div>
+            <span id="phone-count" style="display: none"></span>
+            <div id="phone-cards" style="display: none"></div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 22px 6px;
+                font-size: 14px;
+                font-weight: 700;
+              "
+            >
+              <span style="font-variant-numeric: tabular-nums">15:16</span>
+              <div style="display: flex; gap: 5px; align-items: center; font-size: 11px">
+                <span>●●●●</span><span>5G</span
+                ><span style="color: #30d158; font-weight: 600">92%</span>
+              </div>
             </div>
-            <div style="display:flex;justify-content:center;padding:6px 0 10px;"><div style="padding:7px 24px;border-radius:16px;background:rgba(120,120,130,0.25);font-size:12px;color:rgba(255,255,255,0.45);font-weight:500;">🔍 Search</div></div>
-            <div style="margin:0 12px;padding:8px 12px;border-radius:24px;background:rgba(80,80,90,0.35);display:flex;justify-content:space-around;">
-              <div style="position:relative"><div style="width:52px;height:52px;border-radius:13px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:22px;">📞</div><div style="position:absolute;top:-3px;right:-3px;background:#FF3B30;color:#fff;font-size:7px;font-weight:700;padding:1px 3px;border-radius:7px;">9+</div></div>
-              <div><div style="width:52px;height:52px;border-radius:13px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:22px;">🦁</div></div>
-              <div style="position:relative"><div style="width:52px;height:52px;border-radius:13px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:22px;">💬</div><div style="position:absolute;top:-3px;right:-3px;background:#FF3B30;color:#fff;font-size:7px;font-weight:700;padding:1px 3px;border-radius:7px;font-variant-numeric:tabular-nums;">282</div></div>
-              <div><div style="width:52px;height:52px;border-radius:13px;background:rgba(120,120,130,0.35);display:flex;align-items:center;justify-content:center;font-size:22px;">🎵</div></div>
+            <div id="ios-app-grid" class="ios-app-grid">
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/weather.jpg" alt="" />
+                <div class="ios-app-label">Weather</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/stocks.jpg" alt="" />
+                <div class="ios-app-label">Stocks</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/find-my.jpg" alt="" />
+                <div class="ios-app-label">Find My</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/home.jpg" alt="" />
+                <div class="ios-app-label">Home</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/books.jpg" alt="" />
+                <div class="ios-app-label">Books</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/itunes-store.jpg" alt="" />
+                <div class="ios-app-label">iTunes</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/fitness.jpg" alt="" />
+                <div class="ios-app-label">Fitness</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/watch.jpg" alt="" />
+                <div class="ios-app-label">Watch</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/contacts.jpg" alt="" />
+                <div class="ios-app-label">Contacts</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/files.jpg" alt="" />
+                <div class="ios-app-label">Files</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/translate.jpg" alt="" />
+                <div class="ios-app-label">Translate</div>
+              </div>
+              <div class="ios-app">
+                <img class="ios-app-icon" src="assets/icons/calendar.jpg" alt="" />
+                <div class="ios-app-label">Calendar</div>
+              </div>
             </div>
-          
+
+            <div class="ios-liquid-stack">
+              <div id="ios-notification-a" class="ios-glass-card ios-glass-notification">
+                <img src="assets/icons/notify-messages.jpg" alt="" />
+                <div class="ios-notification-copy">
+                  <div class="ios-notification-title"><span>Messages</span><span>now</span></div>
+                  <div class="ios-notification-body">Liquid glass preview is ready for review.</div>
+                </div>
+              </div>
+              <div id="ios-notification-b" class="ios-glass-card ios-glass-notification">
+                <img src="assets/icons/slack.jpg" alt="" />
+                <div class="ios-notification-copy">
+                  <div class="ios-notification-title"><span>HyperFrames</span><span>1m</span></div>
+                  <div class="ios-notification-body">
+                    Rendering with one worker. Browser proof attached.
+                  </div>
+                </div>
+              </div>
+              <div class="ios-widget-row">
+                <div id="ios-live-widget" class="ios-glass-card ios-widget">
+                  <div class="ios-widget-label">Live activity</div>
+                  <div class="ios-widget-value">92%</div>
+                  <div class="ios-widget-caption">Frames encoded without dropped captures.</div>
+                </div>
+                <div id="ios-music-widget" class="ios-glass-card ios-widget">
+                  <div class="ios-widget-label">Now playing</div>
+                  <div class="ios-widget-value">Glass</div>
+                  <div class="ios-widget-caption">Aurora shader mix · spatial preview</div>
+                </div>
+              </div>
+              <div id="ios-control-strip" class="ios-glass-card ios-control-strip">
+                <div class="ios-toggle active">Wi-Fi</div>
+                <div class="ios-toggle active">5G</div>
+                <div class="ios-toggle">Focus</div>
+                <div class="ios-toggle">Air</div>
+              </div>
+              <div class="ios-search-pill">Search</div>
+            </div>
+
+            <div id="ios-real-dock" class="ios-dock">
+              <div class="ios-dock-item">
+                <img class="ios-dock-icon" src="assets/icons/phone.jpg" alt="" />
+                <span class="ios-badge">9+</span>
+              </div>
+              <div class="ios-dock-item">
+                <img class="ios-dock-icon" src="assets/icons/brave.jpg" alt="" />
+              </div>
+              <div class="ios-dock-item">
+                <img class="ios-dock-icon" src="assets/icons/messages.jpg" alt="" />
+                <span class="ios-badge">282</span>
+              </div>
+              <div class="ios-dock-item">
+                <img class="ios-dock-icon" src="assets/icons/music.jpg" alt="" />
+              </div>
+            </div>
+          </div>
         </div>
       </canvas>
 
@@ -280,31 +565,31 @@
       eT.dispose();
       pm.dispose();
 
-      // ── Background ─────────────────────────────────────────────────────
-      scene.add(
-        new THREE.Mesh(
-          new THREE.PlaneGeometry(22, 14),
-          new THREE.ShaderMaterial({
-            uniforms: {},
-            vertexShader:
-              "varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
-            fragmentShader:
-              "varying vec2 v;void main(){vec3 c=vec3(0.02,0.02,0.03);c+=vec3(0.05,0.02,0.1)*exp(-pow(length(v-vec2(0.3,0.55)),2.0)*5.0);c+=vec3(0.02,0.05,0.1)*exp(-pow(length(v-vec2(0.7,0.45)),2.0)*5.0);gl_FragColor=vec4(c,1.0);}",
-            depthWrite: false,
-          }),
-        ),
-      ).position.z = -6;
+      // ── Three.js shader backdrop ────────────────────────────────────────
+      var bgUniforms = { uTime: { value: 0 }, uAspect: { value: W / H } };
+      var bgPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(28, 16),
+        new THREE.ShaderMaterial({
+          uniforms: bgUniforms,
+          vertexShader:
+            "varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
+          fragmentShader:
+            "uniform float uTime;uniform float uAspect;varying vec2 v;float wave(vec2 p,float s,float t){return sin(p.x*s+p.y*s*.57+uTime*t);}void main(){vec2 p=v*2.0-1.0;p.x*=uAspect;float w=wave(p,3.0,.22)+.55*wave(p.yx+vec2(.7,-.2),5.1,.16)+.32*wave(p+vec2(-.4,.5),8.0,-.12);float a=smoothstep(-.75,1.05,w);vec3 navy=vec3(.015,.013,.055);vec3 cyan=vec3(.02,.42,.72);vec3 violet=vec3(.30,.08,.55);vec3 amber=vec3(.95,.42,.04);float ribbon=smoothstep(.22,.95,sin(p.x*2.2-p.y*3.1+uTime*.18));vec3 c=mix(navy,cyan,a);c=mix(c,violet,smoothstep(.16,1.1,wave(p+vec2(.8,.1),2.4,.1)));c+=amber*ribbon*.33;float glow=exp(-dot(p+vec2(.62,-.08),p+vec2(.62,-.08))*1.7);c+=vec3(.10,.45,.55)*glow;float vign=smoothstep(1.85,.25,length(p));gl_FragColor=vec4(c*vign,1.0);}",
+          depthTest: false,
+          depthWrite: false,
+        }),
+      );
+      bgPlane.position.z = -7.5;
+      scene.add(bgPlane);
 
       // Vibrant aurora-colored floor
       var floor = new THREE.Mesh(
         new THREE.PlaneGeometry(30, 30),
-        new THREE.MeshStandardMaterial({ color: 0x0a1530, metalness: 0.8, roughness: 0.25 }),
+        new THREE.MeshStandardMaterial({ color: 0x081427, metalness: 0.86, roughness: 0.22 }),
       );
       floor.rotation.x = -PI / 2;
       floor.position.y = -2.5;
       scene.add(floor);
-      // Aurora-tinted background
-      scene.background = new THREE.Color(0x0c0a20);
 
       scene.add(new THREE.AmbientLight(0x222233, 0.5));
       var kL = new THREE.DirectionalLight(0xffffff, 2.2);
@@ -321,12 +606,10 @@
       var capPhoneCvs = document.getElementById("cap-phone");
       var capPhoneCtx = capPhoneCvs.getContext("2d");
       var phoneHtmlEl = document.getElementById("phone-html");
-      var phoneScrollEl = document.getElementById("phone-scroll");
 
       var capLapCvs = document.getElementById("cap-laptop");
       var capLapCtx = capLapCvs.getContext("2d");
       var lapHtmlEl = document.getElementById("laptop-html");
-      var lapScrollEl = document.getElementById("laptop-scroll");
 
       var apiOk = (function () {
         var tc = document.createElement("canvas");
@@ -336,6 +619,38 @@
         return ctx && typeof ctx.drawElementImage === "function";
       })();
       var paintReady = false;
+
+      function waitForImages() {
+        var images = Array.prototype.slice.call(document.querySelectorAll("img"));
+        return Promise.all(
+          images.map(function (image) {
+            if (image.complete) return Promise.resolve();
+            return new Promise(function (resolveImage) {
+              image.onload = resolveImage;
+              image.onerror = resolveImage;
+            });
+          }),
+        );
+      }
+
+      function waitForPaint(canvas) {
+        return new Promise(function (resolvePaint) {
+          if (!canvas || typeof canvas.requestPaint !== "function") {
+            resolvePaint();
+            return;
+          }
+          var resolved = false;
+          function done() {
+            if (resolved) return;
+            resolved = true;
+            canvas.onpaint = null;
+            resolvePaint();
+          }
+          canvas.onpaint = done;
+          canvas.requestPaint();
+          setTimeout(done, 100);
+        });
+      }
 
       // Generate card HTML for both screens
       var cardData = [
@@ -464,36 +779,6 @@
       var loader = new THREE.GLTFLoader();
       loader.setDRACOLoader(draco);
 
-      // ── Morphing Glass Lens (single, shared between devices) ───────────
-      var glassMat = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        metalness: 0,
-        roughness: 0.02,
-        transmission: 1,
-        thickness: 1.8,
-        ior: 1.45,
-        attenuationColor: new THREE.Color(0xe8f4ff),
-        attenuationDistance: 10,
-        clearcoat: 1,
-        clearcoatRoughness: 0.03,
-        specularIntensity: 1,
-        envMapIntensity: 2.5,
-        transparent: true,
-        opacity: 0.85,
-        side: THREE.DoubleSide,
-      });
-
-      var glassGeos = [
-        new THREE.SphereGeometry(0.22, 32, 32),
-        new THREE.IcosahedronGeometry(0.22, 1),
-        new THREE.OctahedronGeometry(0.25, 0),
-        new THREE.DodecahedronGeometry(0.22, 0),
-        new THREE.TetrahedronGeometry(0.28, 0),
-        new THREE.TorusGeometry(0.16, 0.07, 16, 32),
-      ];
-      var glassLens = new THREE.Mesh(glassGeos[0], glassMat);
-      glassLens.renderOrder = 10;
-
       // iPhone
       loader.load("models/iphone.glb", function (gltf) {
         var m = gltf.scene;
@@ -509,78 +794,21 @@
             child.material = new THREE.MeshBasicMaterial({ map: phoneTex });
           }
         });
-        glassLens.visible = false; // disabled — iOS 26 doesn't use the morphing lens
-        // glassLens removed
-
         phoneGrp.add(m);
         ready++;
-        if (ready === 2) onReady();
-      });
-
-      // MacBook
-      loader.load("models/macbook.glb", function (gltf) {
-        var m = gltf.scene;
-        var box = new THREE.Box3().setFromObject(m);
-        var sz = box.getSize(new THREE.Vector3());
-        var s = 4.5 / Math.max(sz.x, sz.z);
-        m.scale.setScalar(s);
-        box.setFromObject(m);
-        m.position.sub(box.getCenter(new THREE.Vector3()));
-
-        m.traverse(function (child) {
-          if (child.isMesh && (child.name === "matte" || child.name === "Matte")) {
-            child.material = new THREE.MeshBasicMaterial({ map: lapTex });
-          }
-        });
-
-        // Apple logo on back of lid — exact coords from model inspection:
-        // back mesh center: (0, 0.04, -1.54), matte center: (0, 0.15, -1.56)
-        // Back surface faces -Z. Logo at z = -1.63 (outside back surface), facing -Z.
-        var lc = document.createElement("canvas");
-        lc.width = 256;
-        lc.height = 256;
-        var lx = lc.getContext("2d");
-        lx.clearRect(0, 0, 256, 256);
-        lx.save();
-        lx.translate(128, 128);
-        lx.scale(11, 11);
-        lx.translate(-12, -13);
-        lx.fillStyle = "#b8b8bc";
-        lx.fill(
-          new Path2D(
-            "M18.71,19.5C17.88,20.49 17,21.4 15.66,21.42C14.29,21.45 13.73,20.56 12.18,20.56C10.63,20.56 9.99,21.4 8.74,21.45C7.44,21.5 6.47,20.36 5.62,19.39C3.89,17.39 2.59,13.78 4.37,11.37C5.25,10.17 6.61,9.42 8.08,9.4C9.4,9.37 10.62,10.35 11.43,10.35C12.24,10.35 13.72,9.17 15.32,9.35C15.98,9.38 17.66,9.61 18.72,11.17C18.62,11.23 16.39,12.52 16.42,15.19C16.45,18.37 19.18,19.35 19.21,19.36ZM15.23,7.7C15.96,6.82 16.43,5.6 16.31,4.38C15.25,4.42 13.97,5.09 13.22,5.96C12.55,6.74 11.98,7.99 12.12,9.18C13.29,9.27 14.5,8.57 15.23,7.7Z",
-          ),
-        );
-        lx.restore();
-        var logoTex = new THREE.CanvasTexture(lc);
-        logoTex.minFilter = THREE.LinearFilter;
-        var appleLogoMesh = new THREE.Mesh(
-          new THREE.PlaneGeometry(0.55, 0.55),
-          new THREE.MeshBasicMaterial({
-            map: logoTex,
-            transparent: true,
-            depthWrite: false,
-            side: THREE.DoubleSide,
-          }),
-        );
-        appleLogoMesh.position.set(0, 0.1, -1.63);
-        appleLogoMesh.rotation.y = PI;
-        m.add(appleLogoMesh);
-
-        lapGrp.add(m);
-        ready++;
-        if (ready === 2) onReady();
+        if (ready === 1) onReady();
       });
 
       function onReady() {
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
+        waitForImages()
+          .then(function () {
+            return waitForPaint(capPhoneCvs);
+          })
+          .then(function () {
             paintReady = true;
             captureScreens();
-            window.__timelines = window.__timelines || {};
-            window.__timelines["ios26-liquid-glass"] = tl;
+            render();
           });
-        });
       }
 
       // ── Cubic Bezier Implementation ────────────────────────────────────
@@ -625,17 +853,18 @@
         lpRY: 0,
         lpRZ: 0,
         cX: 0,
-        cY: 0.15,
-        cZ: 1.6,
+        cY: 0.18,
+        cZ: 6.15,
         clX: 0,
         clY: 0.1,
         clZ: 0,
         drift: 0,
         turn: 0,
-        scroll: 0,
         cardReveal: 0,
         titleFade: 0,
         counter: 0,
+        iosAlert: 0,
+        iosPanel: 0,
         p: 0,
       };
 
@@ -657,9 +886,21 @@
           allCards[ci2].style.opacity = cardProgress;
           allCards[ci2].style.transform = "translateY(" + (1 - cardProgress) * 15 + "px)";
         }
-        // Scroll
-        phoneScrollEl.style.transform = "translateY(-" + S.scroll * 500 + "px)";
-        lapScrollEl.style.transform = "translateY(-" + S.scroll * 300 + "px)";
+        var n1 = document.getElementById("ios-notification-a");
+        var n2 = document.getElementById("ios-notification-b");
+        var ctl = document.getElementById("ios-control-strip");
+        if (n1) {
+          n1.style.opacity = 0.42 + S.iosAlert * 0.58;
+          n1.style.transform = "translateY(" + (1 - S.iosAlert) * 10 + "px)";
+        }
+        if (n2) {
+          n2.style.opacity = 0.35 + S.iosPanel * 0.65;
+          n2.style.transform = "translateY(" + (1 - S.iosPanel) * 12 + "px)";
+        }
+        if (ctl) {
+          ctl.style.opacity = 0.72 + S.iosPanel * 0.28;
+          ctl.style.transform = "scale(" + (0.97 + S.iosPanel * 0.03) + ")";
+        }
         // Re-capture HTML to texture
         captureScreens();
 
@@ -676,58 +917,22 @@
         );
         lapGrp.rotation.set(S.lpRX, S.lpRY, S.lpRZ);
         turntable.rotation.y = S.turn;
-        // Glass lens disabled for iOS 26
-        glassLens.visible = false;
-        // Single morphing glass — orbits around device edges, never overlaps screen
-        var t = tl.time();
-        var geoIdx = Math.floor(d * 0.8) % glassGeos.length;
-        if (glassLens.geometry !== glassGeos[geoIdx]) glassLens.geometry = glassGeos[geoIdx];
-        glassLens.rotation.set(d * 0.7, d * 0.9, d * 0.4);
-
-        // Glass lens disabled for iOS 26 showcase
-        glassLens.visible = false;
-        var gx, gy, gz;
-        if (t < 7) {
-          // Slide across iPhone screen face
-          var px = phoneGrp.position.x,
-            py = phoneGrp.position.y,
-            pz = phoneGrp.position.z;
-          gx = px + Math.sin(d * 1.4) * 0.35;
-          gy = py + Math.cos(d * 1.1) * 0.6;
-          gz = pz + 0.15;
-        } else if (t < 11) {
-          // Slide across MacBook screen face
-          var lx2 = lapGrp.position.x,
-            ly2 = lapGrp.position.y,
-            lz2 = lapGrp.position.z;
-          gx = lx2 + Math.sin(d * 1.2) * 1.2;
-          gy = ly2 + 0.3 + Math.cos(d * 0.9) * 0.6;
-          gz = lz2 + 0.2;
-        } else {
-          // Glide between both screens
-          var mx = (phoneGrp.position.x + lapGrp.position.x) * 0.5;
-          var my = (phoneGrp.position.y + lapGrp.position.y) * 0.5;
-          gx = mx + Math.sin(d * 1.0) * 1.5;
-          gy = my + 0.2 + Math.cos(d * 0.8) * 0.5;
-          gz = 0.3;
-        }
-        glassLens.position.set(gx, gy, gz);
+        bgUniforms.uTime.value = d;
         camera.position.set(S.cX, S.cY, S.cZ);
         camera.lookAt(S.clX, S.clY, S.clZ);
         renderer.render(scene, camera);
       }
 
       // ── GSAP Timeline — Product Review Edit ────────────────────────────
-      // __timelines created in onReady() after GLTF models load
       var tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["ios26-liquid-glass"] = tl;
 
       tl.to(S, { p: 1, drift: 15, duration: 15, ease: "none", onUpdate: render }, 0);
 
-      // ── iOS 26 Showcase: zoomed-in hero → slow zoom out ──
-      // Start very close to the screen, facing front
-      // Camera starts close (cZ=2.5) and slowly pulls back (cZ=5)
-      tl.to(S, { cZ: 3.2, duration: 12, ease: driftEase }, 0.5);
-      tl.to(S, { cY: 0.3, duration: 12, ease: driftEase }, 0.5);
+      // ── iOS 26 Showcase: full-device hero with a subtle drift-in ──
+      tl.to(S, { cZ: 6.45, duration: 12, ease: driftEase }, 0.5);
+      tl.to(S, { cY: 0.16, duration: 12, ease: driftEase }, 0.5);
 
       // Very gentle tilt — shows the glass icon refraction from slightly different angles
       tl.to(S, { phRY: PI + 0.04, phRX: 0.01, duration: 4, ease: breatheEase }, 0.5);
@@ -739,8 +944,8 @@
 
       // Move MacBook off screen so it doesn't appear
       tl.set(S, { lpX: 10 }, 0);
-
-      // __timelines registered in onReady() after GLTF models load
+      tl.to(S, { iosAlert: 1, duration: 0.8, ease: breatheEase }, 0.35);
+      tl.to(S, { iosPanel: 1, duration: 1.1, ease: breatheEase }, 0.75);
     </script>
   </body>
 </html>

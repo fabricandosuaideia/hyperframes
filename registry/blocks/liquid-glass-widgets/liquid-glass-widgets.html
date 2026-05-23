@@ -4,10 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1920, height=1080" />
     <title>Liquid Glass Widgets</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="lib/liquid-glass.iife.js"></script>
@@ -122,12 +118,17 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 10px;
+        padding: 22px;
+        border-radius: 28px;
+        background: #02040a;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.42);
       }
       .stat-label {
         font-size: 14px;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.5);
+        color: #fff;
         text-transform: uppercase;
         letter-spacing: 1.5px;
       }
@@ -141,7 +142,66 @@
       .stat-unit {
         font-size: 24px;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.45);
+        color: #fff;
+      }
+      .mini-meter {
+        width: 140px;
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .mini-meter-fill {
+        width: 0%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #06e3fa, #4fdb5e);
+        box-shadow: 0 0 12px rgba(79, 219, 94, 0.55);
+      }
+      .battery-shell {
+        position: relative;
+        width: 118px;
+        height: 40px;
+        padding: 4px;
+        border: 2px solid rgba(255, 255, 255, 0.66);
+        border-radius: 12px;
+      }
+      .battery-shell::after {
+        content: "";
+        position: absolute;
+        top: 12px;
+        right: -9px;
+        width: 5px;
+        height: 14px;
+        border-radius: 0 5px 5px 0;
+        background: rgba(255, 255, 255, 0.66);
+      }
+      .battery-fill {
+        width: 72%;
+        height: 100%;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #4ade80, #06e3fa);
+        box-shadow: 0 0 18px rgba(74, 222, 128, 0.45);
+      }
+      .steps-ring {
+        width: 106px;
+        height: 106px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: conic-gradient(#a78bfa 0deg, #06e3fa 180deg, rgba(255, 255, 255, 0.18) 180deg);
+      }
+      .steps-ring-inner {
+        width: 78px;
+        height: 78px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #02040a;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
       }
       #text-stat1 {
         top: 300px;
@@ -166,13 +226,22 @@
         justify-content: center;
         gap: 20px;
         padding: 32px;
+        border-radius: 28px;
+        background: #02040a;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.42);
       }
       .showcase-icon {
-        width: 64px;
-        height: 64px;
+        width: 168px;
+        height: 52px;
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      .showcase-logo {
+        width: 150px;
+        height: auto;
+        display: block;
       }
       .showcase-title {
         font-size: 28px;
@@ -184,10 +253,38 @@
       .showcase-desc {
         font-size: 15px;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.5);
+        color: #fff;
         text-align: center;
         line-height: 1.5;
         max-width: 380px;
+      }
+      .showcase-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .showcase-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4ade80;
+        box-shadow: 0 0 14px rgba(74, 222, 128, 0.7);
+      }
+      .showcase-progress {
+        width: 300px;
+        height: 7px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+      }
+      .showcase-progress-fill {
+        width: 18%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #06e3fa, #4fdb5e);
       }
       #text-showcase {
         top: 380px;
@@ -202,6 +299,9 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
+        border-radius: 40px;
+        background: #02040a;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
       }
       .pill-dot {
         width: 8px;
@@ -262,58 +362,40 @@
       <!-- Stat cards -->
       <div id="text-stat1" class="text-overlay stat-text">
         <span class="stat-label">Temperature</span>
-        <span class="stat-value">24<span class="stat-unit">&deg;</span></span>
+        <span class="stat-value"
+          ><span id="temp-value">21</span><span class="stat-unit">&deg;</span></span
+        >
+        <div class="mini-meter"><div id="temp-meter" class="mini-meter-fill"></div></div>
       </div>
       <div id="text-stat2" class="text-overlay stat-text">
         <span class="stat-label">Battery</span>
-        <span class="stat-value">87<span class="stat-unit">%</span></span>
+        <div class="battery-shell"><div id="battery-fill" class="battery-fill"></div></div>
+        <span class="stat-value"
+          ><span id="battery-value">87</span><span class="stat-unit">%</span></span
+        >
       </div>
       <div id="text-stat3" class="text-overlay stat-text">
         <span class="stat-label">Steps</span>
-        <span class="stat-value">8.2<span class="stat-unit">K</span></span>
+        <div id="steps-ring" class="steps-ring">
+          <div id="steps-value" class="steps-ring-inner">8.2K</div>
+        </div>
       </div>
 
       <!-- Showcase card -->
       <div id="text-showcase" class="text-overlay showcase-text">
         <div class="showcase-icon">
-          <svg width="48" height="48" viewBox="0 0 100 100" fill="none">
-            <path
-              d="M10.1851 57.8021L33.1145 73.8313C36.2202 75.9978 41.5173 73.5433 42.4816 69.4984L51.7611 30.4271C52.7253 26.3822 48.5802 23.9277 44.4602 26.0942L13.917 42.1235C6.96677 45.7676 4.97564 54.1579 10.1851 57.8021Z"
-              fill="url(#hfm0)"
-            />
-            <path
-              d="M87.5129 57.5141L56.9696 73.5433C52.8371 75.7098 48.7046 73.2553 49.6688 69.2104L58.9483 30.1391C59.9125 26.0942 65.2097 23.6397 68.3154 25.8062L91.2447 41.8354C96.4668 45.4796 94.4631 53.8699 87.5129 57.5141Z"
-              fill="url(#hfm1)"
-            />
-            <defs>
-              <linearGradient
-                id="hfm0"
-                x1="48.5676"
-                y1="25"
-                x2="44.7804"
-                y2="71.9384"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stop-color="#06E3FA" />
-                <stop offset="1" stop-color="#4FDB5E" />
-              </linearGradient>
-              <linearGradient
-                id="hfm1"
-                x1="54.8282"
-                y1="73.8392"
-                x2="72.0989"
-                y2="32.8932"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stop-color="#06E3FA" />
-                <stop offset="1" stop-color="#4FDB5E" />
-              </linearGradient>
-            </defs>
-          </svg>
+          <img class="showcase-logo" src="assets/hyperframes-logo-dark.svg" alt="HyperFrames" />
         </div>
-        <div class="showcase-title">HyperFrames</div>
+        <div class="showcase-title">Preview pipeline</div>
         <div class="showcase-desc">
           Write HTML, render video. Ship compositions at the speed of code.
+        </div>
+        <div class="showcase-status">
+          <span class="showcase-dot" id="showcase-dot"></span
+          ><span id="showcase-status">Encoding frames</span>
+        </div>
+        <div class="showcase-progress">
+          <div id="showcase-progress" class="showcase-progress-fill"></div>
         </div>
       </div>
 
@@ -431,14 +513,33 @@
       var glassCanvas = document.getElementById("glass-canvas");
       var ctx = glassCanvas.getContext("2d");
       var lg = new LiquidGlass.LiquidGlassCanvas(glassCanvas);
+      var lgReady = false;
 
       function renderGlass(time) {
+        if (!lgReady) return;
         uniforms.uTime.value = time;
         renderer.render(scene, camera);
         ctx.clearRect(0, 0, W, H);
         ctx.drawImage(threeCanvas, 0, 0, W, H);
         lg.renderGlassElements();
       }
+
+      function requestGlassRender(time) {
+        if (glassCanvas.requestPaint) {
+          glassCanvas.onpaint = function () {
+            renderGlass(time);
+          };
+          glassCanvas.requestPaint();
+          return;
+        }
+        renderGlass(time);
+      }
+
+      lg.waitForInit().then(function (ok) {
+        if (!ok) return;
+        lgReady = true;
+        requestGlassRender(0);
+      });
 
       /* ── GSAP Timeline ──────────────────────────────────────────────── */
       window.__timelines = window.__timelines || {};
@@ -460,139 +561,110 @@
       var p2t = document.getElementById("text-pill2");
       var p3t = document.getElementById("text-pill3");
 
-      /* ── Stat cards: loose circular orbit ── */
-      /* Stat 1: elliptical orbit upper region */
-      tl.fromTo(
-        [s1g, s1t],
-        { left: 300, top: 260 },
-        { left: 900, top: 260, duration: 4, ease: "sine.inOut", yoyo: true, repeat: 1 },
-        0,
-      );
-      tl.fromTo(
-        [s1g, s1t],
-        { top: 260 },
-        { top: 440, duration: 2.6, ease: "sine.inOut", yoyo: true, repeat: 2 },
-        0,
-      );
+      var tempValue = document.getElementById("temp-value");
+      var batteryValue = document.getElementById("battery-value");
+      var stepsValue = document.getElementById("steps-value");
+      var stepsRing = document.getElementById("steps-ring");
+      var showcaseStatus = document.getElementById("showcase-status");
+      var tempCounter = { value: 21 };
+      var batteryCounter = { value: 87 };
+      var stepsCounter = { value: 8.2 };
 
-      /* Stat 2: offset orbit mid region */
-      tl.fromTo(
-        [s2g, s2t],
-        { left: 700, top: 380 },
-        { left: 1200, top: 380, duration: 3.6, ease: "sine.inOut", yoyo: true, repeat: 1 },
-        0,
-      );
-      tl.fromTo(
-        [s2g, s2t],
-        { top: 380 },
-        { top: 200, duration: 3.2, ease: "power1.inOut", yoyo: true, repeat: 1 },
-        0,
-      );
+      var allPanels = [s1g, s1t, s2g, s2t, s3g, s3t, scg, sct, p1g, p1t, p2g, p2t, p3g, p3t];
+      gsap.set(allPanels, { opacity: 1, top: 1160 });
 
-      /* Stat 3: offset orbit right region */
-      tl.fromTo(
-        [s3g, s3t],
-        { left: 1100, top: 300 },
-        { left: 500, top: 300, duration: 4.4, ease: "sine.inOut", yoyo: true, repeat: 1 },
-        0,
-      );
-      tl.fromTo(
-        [s3g, s3t],
-        { top: 300 },
-        { top: 500, duration: 2.0, ease: "sine.inOut", yoyo: true, repeat: 3 },
-        0,
-      );
+      tl.to([s1g, s1t], { top: 300, duration: 0.46, ease: "power3.out" }, 0.12);
+      tl.to([s2g, s2t], { top: 300, duration: 0.46, ease: "power3.out" }, 0.24);
+      tl.to([s3g, s3t], { top: 300, duration: 0.46, ease: "power3.out" }, 0.36);
+      tl.to([scg, sct], { top: 380, duration: 0.5, ease: "power3.out" }, 0.5);
+      tl.to([p1g, p1t], { top: 720, duration: 0.32, ease: "power3.out" }, 0.9);
+      tl.to([p2g, p2t], { top: 720, duration: 0.32, ease: "power3.out" }, 1.0);
+      tl.to([p3g, p3t], { top: 720, duration: 0.32, ease: "power3.out" }, 1.1);
 
-      /* ── Showcase card: independent drift ── */
-      tl.fromTo(
-        [scg, sct],
-        { left: 1050, top: 340 },
-        { left: 700, top: 340, duration: 8, ease: "sine.inOut", yoyo: true, repeat: 1 },
-        0,
+      tl.to("#temp-meter", { width: "76%", duration: 1.7, ease: "power2.out" }, 0.9);
+      tl.to(
+        tempCounter,
+        {
+          value: 25,
+          duration: 2.2,
+          ease: "power2.out",
+          onUpdate: function () {
+            tempValue.textContent = Math.round(tempCounter.value);
+          },
+        },
+        0.9,
       );
-      tl.fromTo(
-        [scg, sct],
-        { top: 340 },
-        { top: 500, duration: 3.0, ease: "power2.inOut", yoyo: true, repeat: 1 },
-        0,
-      );
-      tl.fromTo(
-        [scg, sct],
-        { top: "+=0" },
-        { top: "+=40", duration: 1.8, ease: "sine.inOut", yoyo: true, repeat: 3 },
-        0.5,
-      );
-
-      /* ── Pills: float upward then drift sideways ── */
-      /* Pill 1 */
-      tl.fromTo(
-        [p1g, p1t],
-        { left: 400, top: 780 },
-        { left: 400, top: 620, duration: 2, ease: "power2.out" },
-        0,
+      tl.to("#battery-fill", { width: "91%", duration: 2.4, ease: "power2.out" }, 1.05);
+      tl.to(
+        batteryCounter,
+        {
+          value: 91,
+          duration: 2.4,
+          ease: "power2.out",
+          onUpdate: function () {
+            batteryValue.textContent = Math.round(batteryCounter.value);
+          },
+        },
+        1.05,
       );
       tl.to(
-        [p1g, p1t],
-        { left: 250, top: 680, duration: 6, ease: "sine.inOut", yoyo: true, repeat: 1 },
-        2,
+        stepsCounter,
+        {
+          value: 9.1,
+          duration: 2.6,
+          ease: "power2.out",
+          onUpdate: function () {
+            var degrees = Math.round(stepsCounter.value * 31.4);
+            stepsValue.textContent = stepsCounter.value.toFixed(1) + "K";
+            stepsRing.style.background =
+              "conic-gradient(#a78bfa 0deg, #06e3fa " +
+              degrees +
+              "deg, rgba(255, 255, 255, 0.18) " +
+              degrees +
+              "deg)";
+          },
+        },
+        1.2,
       );
-      tl.fromTo(
-        [p1g, p1t],
-        { top: "+=0" },
-        { top: "+=35", duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: 4 },
-        0.3,
+      tl.to("#showcase-progress", { width: "92%", duration: 4.1, ease: "none" }, 1.2);
+      tl.to(
+        "#showcase-dot",
+        { scale: 1.5, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 7 },
+        1.4,
       );
-
-      /* Pill 2 */
-      tl.fromTo(
-        [p2g, p2t],
-        { left: 700, top: 800 },
-        { left: 700, top: 650, duration: 2.2, ease: "back.out(1.4)" },
-        0,
+      tl.call(
+        function () {
+          showcaseStatus.textContent = "Preview ready";
+        },
+        null,
+        5.2,
       );
       tl.to(
-        [p2g, p2t],
-        { left: 900, top: 700, duration: 5.8, ease: "sine.inOut", yoyo: true, repeat: 1 },
+        [scg, sct],
+        { top: "-=10", duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 },
+        5.2,
+      );
+      tl.to(
+        ".pill-dot",
+        { scale: 1.55, duration: 0.2, ease: "power2.out", stagger: 0.12, yoyo: true, repeat: 3 },
         2.2,
       );
-      tl.fromTo(
-        [p2g, p2t],
-        { top: "+=0" },
-        { top: "+=30", duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 4 },
-        0.6,
-      );
 
-      /* Pill 3 */
-      tl.fromTo(
-        [p3g, p3t],
-        { left: 1000, top: 820 },
-        { left: 1000, top: 640, duration: 1.8, ease: "expo.out" },
-        0,
-      );
       tl.to(
-        [p3g, p3t],
-        { left: 1250, top: 690, duration: 6.2, ease: "sine.inOut", yoyo: true, repeat: 1 },
-        1.8,
+        [s1g, s1t, s2g, s2t, s3g, s3t],
+        { top: "-=12", duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 },
+        5.7,
       );
-      tl.fromTo(
-        [p3g, p3t],
-        { top: "+=0" },
-        { top: "+=28", duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: 5 },
-        0.1,
-      );
+      tl.to(allPanels, { top: "+=760", duration: 0.42, ease: "power2.in" }, 6.74);
 
       /* Duration driver */
       tl.to({ v: 0 }, { v: 1, duration: DURATION, ease: "none" }, 0);
 
       tl.eventCallback("onUpdate", function () {
-        renderGlass(tl.time());
+        requestGlassRender(tl.time());
       });
 
       window.__timelines["liquid-glass-widgets"] = tl;
-
-      setTimeout(function () {
-        renderGlass(0);
-      }, 0);
     </script>
   </body>
 </html>

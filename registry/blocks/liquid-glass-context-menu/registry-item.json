@@ -10,7 +10,7 @@
     "height": 1080
   },
   "duration": 8,
-  "tags": ["liquid-glass-html-in-canvas", "webgpu"],
+  "tags": ["html-in-canvas", "liquid-glass-html-in-canvas", "webgpu"],
   "files": [
     {
       "path": "liquid-glass-context-menu.html",

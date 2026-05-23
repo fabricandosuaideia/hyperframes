@@ -4,10 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1920, height=1080" />
     <title>Liquid Glass Context Menu</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="lib/liquid-glass.iife.js"></script>
@@ -50,8 +46,8 @@
       /* ── Glass Panel ── */
       .menu-panel {
         position: absolute;
-        width: 260px;
-        height: 380px;
+        width: 360px;
+        height: 500px;
         background: rgba(255, 255, 255, 0.06);
         --lg-blur: 0.22;
         --lg-refraction: 0.6;
@@ -67,8 +63,8 @@
         --lg-saturation: 0.25;
       }
       #glass-menu {
-        top: 200px;
-        left: 300px;
+        top: 270px;
+        left: 1980px;
       }
 
       /* ── Text Overlay ── */
@@ -77,33 +73,120 @@
         z-index: 2;
         pointer-events: none;
       }
-      .menu-text {
-        width: 260px;
-        height: 380px;
-        display: flex;
-        flex-direction: column;
-        padding: 10px 0;
-      }
-      #text-menu {
-        top: 200px;
-        left: 300px;
-      }
-
-      .menu-item {
+      .context-file {
+        position: absolute;
+        top: 340px;
+        left: 500px;
+        z-index: 2;
+        width: 360px;
+        height: 104px;
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 10px 18px;
-        font-size: 14px;
-        font-weight: 500;
+        gap: 18px;
+        padding: 18px 22px;
+        border-radius: 26px;
+        background: #02040a;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.22),
+          0 24px 70px rgba(0, 0, 0, 0.28);
+      }
+      .file-icon {
+        width: 58px;
+        height: 68px;
+        flex-shrink: 0;
+        border-radius: 16px;
+        background:
+          linear-gradient(135deg, rgba(6, 227, 250, 0.92), rgba(79, 219, 94, 0.85)),
+          rgba(255, 255, 255, 0.12);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34);
+      }
+      .file-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .file-title {
+        color: #fff;
+        font-size: 21px;
+        font-weight: 780;
+        letter-spacing: 0;
+      }
+      .file-subtitle {
+        color: #fff;
+        font-size: 15px;
+        font-weight: 650;
+      }
+      .pointer {
+        position: absolute;
+        top: 395px;
+        left: 778px;
+        z-index: 4;
+        width: 34px;
+        height: 44px;
+        border-radius: 2px;
+        background: #fff;
+        clip-path: polygon(0 0, 0 100%, 31% 73%, 47% 100%, 62% 93%, 46% 67%, 82% 67%);
+        filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.4));
+      }
+      .click-ring {
+        position: absolute;
+        top: 390px;
+        left: 770px;
+        z-index: 3;
+        width: 46px;
+        height: 46px;
+        border: 2px solid rgba(255, 255, 255, 0.75);
+        border-radius: 50%;
+        opacity: 0;
+      }
+      .menu-text {
+        width: 360px;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        padding: 16px 0;
+        background: #02040a;
+        border-radius: 16px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+        overflow: hidden;
+      }
+      #text-menu {
+        top: 270px;
+        left: 1980px;
+      }
+
+      .menu-highlight {
+        position: absolute;
+        top: 17px;
+        left: 12px;
+        z-index: 0;
+        width: 336px;
+        height: 52px;
+        border-radius: 12px;
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08)),
+          rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        opacity: 0;
+      }
+      .menu-item {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 24px;
+        font-size: 18px;
+        font-weight: 650;
         color: #fff;
         cursor: default;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
       }
       .menu-item svg {
-        width: 16px;
-        height: 16px;
+        width: 22px;
+        height: 22px;
         flex-shrink: 0;
-        stroke: rgba(255, 255, 255, 0.7);
+        stroke: rgba(255, 255, 255, 0.9);
         fill: none;
         stroke-width: 2;
         stroke-linecap: round;
@@ -111,14 +194,16 @@
       }
       .menu-sep {
         height: 1px;
-        margin: 6px 18px;
-        background: rgba(255, 255, 255, 0.1);
+        margin: 10px 24px;
+        background: rgba(255, 255, 255, 0.2);
       }
       .menu-footer {
+        position: relative;
+        z-index: 1;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 10px 18px;
+        padding: 14px 26px;
         margin-top: auto;
       }
       .menu-footer-item {
@@ -126,14 +211,15 @@
         flex-direction: column;
         align-items: center;
         gap: 4px;
-        font-size: 11px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.55);
+        font-size: 13px;
+        font-weight: 650;
+        color: #fff;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
       }
       .menu-footer-item svg {
-        width: 20px;
-        height: 20px;
-        stroke: rgba(255, 255, 255, 0.55);
+        width: 24px;
+        height: 24px;
+        stroke: #fff;
         fill: none;
         stroke-width: 2;
         stroke-linecap: round;
@@ -141,10 +227,30 @@
       }
       .menu-kbd {
         margin-left: auto;
-        font-size: 12px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.3);
+        font-size: 14px;
+        font-weight: 650;
+        color: #fff;
         font-variant-numeric: tabular-nums;
+      }
+      .submenu-preview {
+        position: absolute;
+        top: 456px;
+        left: 1980px;
+        z-index: 2;
+        width: 210px;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: #02040a;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.24),
+          0 18px 42px rgba(0, 0, 0, 0.28);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 760;
+        opacity: 0;
       }
     </style>
   </head>
@@ -164,7 +270,18 @@
         <div id="glass-menu" class="menu-panel liquid-glass"></div>
       </canvas>
 
+      <div id="context-file" class="context-file">
+        <div class="file-icon"></div>
+        <div class="file-meta">
+          <div class="file-title">liquid-glass.mov</div>
+          <div class="file-subtitle">Preview render - 08s</div>
+        </div>
+      </div>
+      <div id="click-ring" class="click-ring"></div>
+      <div id="pointer" class="pointer"></div>
+
       <div id="text-menu" class="text-overlay menu-text">
+        <div id="menu-highlight" class="menu-highlight"></div>
         <div class="menu-item">
           <svg viewBox="0 0 24 24">
             <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
@@ -220,6 +337,7 @@
           </div>
         </div>
       </div>
+      <div id="submenu-preview" class="submenu-preview">Open in New Tab</div>
 
       <div
         id="driver"
@@ -321,8 +439,10 @@
       var glassCanvas = document.getElementById("glass-canvas");
       var ctx = glassCanvas.getContext("2d");
       var lg = new LiquidGlass.LiquidGlassCanvas(glassCanvas);
+      var lgReady = false;
 
       function renderGlass(time) {
+        if (!lgReady) return;
         uniforms.uTime.value = time;
         renderer.render(scene, camera);
         ctx.clearRect(0, 0, W, H);
@@ -330,46 +450,81 @@
         lg.renderGlassElements();
       }
 
+      function requestGlassRender(time) {
+        if (glassCanvas.requestPaint) {
+          glassCanvas.onpaint = function () {
+            renderGlass(time);
+          };
+          glassCanvas.requestPaint();
+          return;
+        }
+        renderGlass(time);
+      }
+
+      lg.waitForInit().then(function (ok) {
+        if (!ok) return;
+        lgReady = true;
+        requestGlassRender(0);
+      });
+
       /* ── GSAP Timeline ──────────────────────────────────────────────── */
       window.__timelines = window.__timelines || {};
       var tl = gsap.timeline({ paused: true });
 
       var gm = document.getElementById("glass-menu");
       var tm = document.getElementById("text-menu");
+      var pointer = document.getElementById("pointer");
+      var fileCard = document.getElementById("context-file");
 
-      /* Diagonal drift: top-left to bottom-right, then back */
+      gsap.set([gm, tm], { left: 1980, top: 270, opacity: 1 });
+      gsap.set(".menu-item", { x: -8, opacity: 1 });
+      gsap.set("#menu-highlight", { top: 17, opacity: 0 });
+      gsap.set("#submenu-preview", { left: 1980, opacity: 1 });
+      gsap.set(fileCard, { top: 372 });
+
+      tl.to(fileCard, { top: 340, duration: 0.38, ease: "power3.out" }, 0.1);
       tl.fromTo(
-        [gm, tm],
-        { left: 260, top: 160 },
-        { left: 1380, top: 160, duration: 4, ease: "sine.inOut" },
-        0,
+        pointer,
+        { left: 620, top: 520 },
+        { left: 778, top: 395, duration: 0.55, ease: "power3.out" },
+        0.35,
       );
-      tl.fromTo([gm, tm], { top: 160 }, { top: 540, duration: 4, ease: "power2.inOut" }, 0);
-
-      /* Return sweep */
-      tl.to([gm, tm], { left: 260, duration: 4, ease: "sine.inOut" }, 4);
-      tl.to([gm, tm], { top: 160, duration: 4, ease: "power1.inOut" }, 4);
-
-      /* Gentle vertical oscillation on top of the drift */
-      tl.fromTo(
-        [gm, tm],
-        { top: "+=0" },
-        { top: "+=60", duration: 1.8, ease: "sine.inOut", yoyo: true, repeat: 3 },
-        0,
+      tl.to("#click-ring", { opacity: 0.7, scale: 1.2, duration: 0.16, ease: "power2.out" }, 0.86);
+      tl.to("#click-ring", { opacity: 0, scale: 1.8, duration: 0.28, ease: "power2.out" }, 1.02);
+      tl.to(
+        fileCard,
+        { scale: 0.985, duration: 0.08, ease: "power2.out", yoyo: true, repeat: 1 },
+        0.86,
       );
+
+      tl.to([gm, tm], { left: 860, top: 270, duration: 0.24, ease: "power3.out" }, 1.0);
+      tl.to(".menu-item", { x: 0, duration: 0.22, ease: "power2.out", stagger: 0.035 }, 1.08);
+
+      tl.to("#menu-highlight", { opacity: 1, duration: 0.12, ease: "none" }, 1.35);
+      tl.to("#menu-highlight", { top: 69, duration: 0.22, ease: "power2.out" }, 2.0);
+      tl.to("#menu-highlight", { top: 227, duration: 0.2, ease: "power2.out" }, 2.85);
+      tl.to("#menu-highlight", { top: 279, duration: 0.2, ease: "power2.out" }, 3.52);
+      tl.to("#submenu-preview", { left: 1236, duration: 0.22, ease: "power2.out" }, 3.62);
+      tl.to(pointer, { left: 1175, top: 472, duration: 0.42, ease: "power3.out" }, 3.7);
+      tl.to(
+        "#submenu-preview",
+        { scale: 0.965, duration: 0.09, ease: "power2.out", yoyo: true, repeat: 1 },
+        4.28,
+      );
+
+      tl.to("#submenu-preview", { left: 1980, duration: 0.18, ease: "power2.in" }, 6.34);
+      tl.to([gm, tm], { left: 1980, top: 286, duration: 0.24, ease: "power2.in" }, 6.52);
+      tl.to(pointer, { left: 1360, top: 590, opacity: 0, duration: 0.35, ease: "power2.in" }, 6.55);
+      tl.to(fileCard, { top: -160, duration: 0.28, ease: "power2.in" }, 6.72);
 
       /* Duration driver */
       tl.to({ v: 0 }, { v: 1, duration: DURATION, ease: "none" }, 0);
 
       tl.eventCallback("onUpdate", function () {
-        renderGlass(tl.time());
+        requestGlassRender(tl.time());
       });
 
       window.__timelines["liquid-glass-context-menu"] = tl;
-
-      setTimeout(function () {
-        renderGlass(0);
-      }, 0);
     </script>
   </body>
 </html>
