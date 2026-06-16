@@ -119,10 +119,7 @@ describe("installRuntimeControlBridge", () => {
     const grading = { preset: "warm-clean", intensity: 0.7 };
     const target = { id: "hero-video", selectorIndex: 0 };
     handler(makeControlMessage("set-color-grading", { target, grading }));
-    expect(deps.onSetColorGrading).toHaveBeenCalledWith(
-      { id: "hero-video", hfId: null, selector: null, selectorIndex: 0 },
-      grading,
-    );
+    expect(deps.onSetColorGrading).toHaveBeenCalledWith(target, grading);
   });
 
   it("dispatches set-color-grading-compare command with target and compare payload", () => {
@@ -131,10 +128,7 @@ describe("installRuntimeControlBridge", () => {
     const compare = { enabled: true, position: 0.42 };
     const target = { id: "hero-video", selectorIndex: 0 };
     handler(makeControlMessage("set-color-grading-compare", { target, compare }));
-    expect(deps.onSetColorGradingCompare).toHaveBeenCalledWith(
-      { id: "hero-video", hfId: null, selector: null, selectorIndex: 0 },
-      compare,
-    );
+    expect(deps.onSetColorGradingCompare).toHaveBeenCalledWith(target, compare);
   });
 
   it("dispatches tick command", () => {

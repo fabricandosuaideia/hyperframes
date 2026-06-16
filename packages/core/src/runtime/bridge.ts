@@ -20,30 +20,6 @@ type BridgeDeps = {
   onDisablePickMode: () => void;
 };
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function readOptionalString(value: unknown): string | null {
-  return typeof value === "string" && value.trim() ? value : null;
-}
-
-function readOptionalIndex(value: unknown): number | null {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed >= 0 ? Math.floor(parsed) : null;
-}
-
-function readColorGradingTarget(value: unknown): HfColorGradingTarget | string | null {
-  if (typeof value === "string") return value;
-  if (!isRecord(value)) return null;
-  return {
-    id: readOptionalString(value.id),
-    hfId: readOptionalString(value.hfId),
-    selector: readOptionalString(value.selector),
-    selectorIndex: readOptionalIndex(value.selectorIndex),
-  };
-}
-
 export function postRuntimeMessage(payload: RuntimeOutboundMessage): void {
   try {
     window.parent.postMessage(payload, "*");
@@ -91,16 +67,11 @@ export function installRuntimeControlBridge(deps: BridgeDeps): (event: MessageEv
       return;
     }
     if (action === "set-color-grading") {
-      const payload = isRecord(data) ? data : {};
-      deps.onSetColorGrading(readColorGradingTarget(payload.target), payload.grading ?? null);
+      deps.onSetColorGrading(data.target ?? null, data.grading ?? null);
       return;
     }
     if (action === "set-color-grading-compare") {
-      const payload = isRecord(data) ? data : {};
-      deps.onSetColorGradingCompare(
-        readColorGradingTarget(payload.target),
-        payload.compare ?? null,
-      );
+      deps.onSetColorGradingCompare(data.target ?? null, data.compare ?? null);
       return;
     }
     if (action === "enable-pick-mode") {

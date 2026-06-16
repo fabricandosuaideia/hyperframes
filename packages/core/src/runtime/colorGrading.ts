@@ -121,12 +121,10 @@ export type RuntimeColorGradingStatus =
   | { state: "active"; message: string }
   | { state: "unavailable"; message: string };
 
-interface HfGlobalWithColorGrading {
-  colorGrading?: RuntimeColorGradingApi;
-}
-
 type WindowWithColorGrading = Window & {
-  __hf?: HfGlobalWithColorGrading;
+  __hf?: {
+    colorGrading?: RuntimeColorGradingApi;
+  };
   __hyperframes?: {
     getVariables?: () => Partial<Record<string, unknown>>;
   };
@@ -161,10 +159,6 @@ const DEFAULT_COMPARE: RuntimeColorGradingCompareState = {
   lineWidth: 2,
 };
 
-function readColorGradingRawAttribute(element: Element): string | null {
-  return element.getAttribute(HF_COLOR_GRADING_ATTR);
-}
-
 function readVariablesForElement(element: Element): HfColorGradingVariableMap {
   const win = window as WindowWithColorGrading;
   const scope = element.closest("[data-composition-id]");
@@ -180,7 +174,7 @@ function readVariablesForElement(element: Element): HfColorGradingVariableMap {
 }
 
 function readColorGradingAttribute(element: Element): NormalizedHfColorGrading | null {
-  const raw = readColorGradingRawAttribute(element);
+  const raw = element.getAttribute(HF_COLOR_GRADING_ATTR);
   if (raw == null) return null;
   return normalizeHfColorGradingWithVariables(raw, readVariablesForElement(element));
 }
@@ -680,20 +674,23 @@ function parseObjectPosition(value: string): { x: number; y: number } {
   const tokens = value.trim().split(/\s+/).filter(Boolean);
   let x = 0.5;
   let y = 0.5;
-  for (const token of tokens) {
+  for (let index = 0; index < tokens.length; index++) {
+    const token = tokens[index] ?? "";
     const xValue = parseObjectPositionPart(token, "x");
     const yValue = parseObjectPositionPart(token, "y");
-    if (xValue !== null && (token === "left" || token === "right" || token.endsWith("%"))) {
+    if (
+      xValue !== null &&
+      (token === "left" || token === "right" || (token.endsWith("%") && index === 0))
+    ) {
       x = xValue;
       continue;
     }
-    if (yValue !== null && (token === "top" || token === "bottom")) {
+    if (
+      yValue !== null &&
+      (token === "top" || token === "bottom" || (token.endsWith("%") && index > 0))
+    ) {
       y = yValue;
       continue;
-    }
-    if (token === "center") {
-      if (x === 0.5) x = 0.5;
-      else y = 0.5;
     }
   }
   return { x, y };

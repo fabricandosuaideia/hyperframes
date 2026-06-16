@@ -147,7 +147,7 @@ function createFrameSourceCache(
 export const __testing = { createFrameSourceCache };
 
 async function redrawRuntimeColorGrading(page: Page): Promise<void> {
-  await page.evaluate(async () => {
+  await page.evaluate(() => {
     const hf = (
       window as Window & {
         __hf?: {
@@ -158,7 +158,7 @@ async function redrawRuntimeColorGrading(page: Page): Promise<void> {
     const redraw = hf?.colorGrading?.redraw;
     if (typeof redraw !== "function") return;
     try {
-      await Promise.resolve(redraw());
+      redraw();
     } catch {
       // Optional page-side shader layer.
     }
