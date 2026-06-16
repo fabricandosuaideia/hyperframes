@@ -4,8 +4,12 @@ import {
   runShadowDelete,
   runShadowTiming,
   runShadowGsapTween,
+  runShadowGsapFidelity,
+  gsapFidelityMismatches,
+  resolveGsapFidelityArgs,
   SdkShadowMismatch,
 } from "./sdkShadow";
+import type { ShadowGsapOp } from "./sdkShadow";
 import type { PatchOperation } from "./sourcePatcher";
 import { openComposition } from "@hyperframes/sdk";
 
@@ -219,13 +223,24 @@ describe("runShadowTiming", () => {
 });
 
 describe("runShadowGsapTween", () => {
-  it("dispatches add against a real timeline and reports success", async () => {
+  it("add reports success and the new tween lands on the target's animationIds", async () => {
     const session = await openComposition(GSAP_HTML);
+    const before = session.getElement("hf-box")?.animationIds.length ?? 0;
     runShadowGsapTween(session, {
       kind: "add",
       target: "hf-box",
       tween: { method: "to", properties: { x: 100 }, duration: 0.5 },
     });
+    expect(session.getElement("hf-box")!.animationIds.length).toBe(before + 1);
+    expect(lastShadow()).toMatchObject({ op: "gsap", dispatched: true, mismatchCount: 0 });
+  });
+
+  it("remove drops the tween from animationIds and reports parity", async () => {
+    const session = await openComposition(GSAP_HTML);
+    const animationId = session.getElement("hf-box")?.animationIds[0];
+    expect(animationId).toBeDefined();
+    runShadowGsapTween(session, { kind: "remove", animationId: animationId! });
+    expect(session.getElement("hf-box")?.animationIds ?? []).not.toContain(animationId);
     expect(lastShadow()).toMatchObject({ op: "gsap", dispatched: true, mismatchCount: 0 });
   });
 
@@ -242,5 +257,120 @@ describe("runShadowGsapTween", () => {
       reason: "cannot_dispatch",
       code: "E_NO_GSAP_TIMELINE",
     });
+  });
+});
+
+const SCRIPT_A = `var tl = gsap.timeline({ paused: true });
+tl.to("[data-hf-id=\\"hf-box\\"]", { opacity: 1, duration: 0.5 }, 0.2);
+window.__timelines["t"] = tl;`;
+
+describe("gsapFidelityMismatches", () => {
+  it("returns no mismatches for identical scripts", () => {
+    expect(gsapFidelityMismatches(SCRIPT_A, SCRIPT_A)).toEqual([]);
+  });
+
+  it("flags a per-field value drift (duration)", () => {
+    const drifted = SCRIPT_A.replace("duration: 0.5", "duration: 0.9");
+    const mismatches = gsapFidelityMismatches(drifted, SCRIPT_A);
+    expect(mismatches.some((m) => m.property === "duration")).toBe(true);
+  });
+
+  it("flags a tween present in one script but not the other", () => {
+    const empty = `var tl = gsap.timeline({ paused: true });
+window.__timelines["t"] = tl;`;
+    const mismatches = gsapFidelityMismatches(empty, SCRIPT_A);
+    expect(mismatches.some((m) => m.property === "tween")).toBe(true);
+  });
+
+  it("does NOT flag property key-order differences (canonical compare)", () => {
+    const ab = `var tl = gsap.timeline({ paused: true });
+tl.to("[data-hf-id=\\"hf-box\\"]", { x: 10, y: 20, duration: 0.5 }, 0);
+window.__timelines["t"] = tl;`;
+    const ba = `var tl = gsap.timeline({ paused: true });
+tl.to("[data-hf-id=\\"hf-box\\"]", { y: 20, x: 10, duration: 0.5 }, 0);
+window.__timelines["t"] = tl;`;
+    expect(gsapFidelityMismatches(ab, ba)).toEqual([]);
+  });
+
+  it("does NOT flag number-vs-string-equivalent property values", () => {
+    const numeric = `var tl = gsap.timeline({ paused: true });
+tl.to("[data-hf-id=\\"hf-box\\"]", { opacity: 1, duration: 0.5 }, 0);
+window.__timelines["t"] = tl;`;
+    const stringy = `var tl = gsap.timeline({ paused: true });
+tl.to("[data-hf-id=\\"hf-box\\"]", { opacity: "1", duration: 0.5 }, 0);
+window.__timelines["t"] = tl;`;
+    expect(gsapFidelityMismatches(numeric, stringy)).toEqual([]);
+  });
+});
+
+describe("runShadowGsapFidelity", () => {
+  const BEFORE_HTML = `<div data-hf-id="hf-stage" data-hf-root style="width:1280px;height:720px">
+  <div data-hf-id="hf-box" style="opacity:0"></div>
+  <script>var tl = gsap.timeline({ paused: true });
+window.__timelines["t"] = tl;</script>
+</div>`;
+
+  it("reports zero mismatches when the SDK output matches the server script", async () => {
+    // Produce the "server" script by applying the same op via the SDK, so a
+    // faithful SDK writer must reproduce it exactly.
+    const ref = await openComposition(BEFORE_HTML);
+    const op = {
+      kind: "add",
+      target: "hf-box",
+      tween: { method: "to", properties: { x: 100 }, duration: 0.5 },
+    } as const;
+    ref.addGsapTween(op.target, op.tween);
+    const serverScript =
+      ref.serialize().match(/<script\b[^>]*>([\s\S]*?)<\/script[^>]*>/i)?.[1] ?? "";
+
+    await runShadowGsapFidelity(BEFORE_HTML, op, serverScript);
+    expect(lastShadow()).toMatchObject({ op: "gsap_fidelity", dispatched: true, mismatchCount: 0 });
+  });
+
+  it("reports mismatches when the server script diverges", async () => {
+    const op = {
+      kind: "add",
+      target: "hf-box",
+      tween: { method: "to", properties: { x: 100 }, duration: 0.5 },
+    } as const;
+    const ref = await openComposition(BEFORE_HTML);
+    ref.addGsapTween(op.target, op.tween);
+    const serverScript = (
+      ref.serialize().match(/<script\b[^>]*>([\s\S]*?)<\/script[^>]*>/i)?.[1] ?? ""
+    ).replace("100", "999");
+
+    await runShadowGsapFidelity(BEFORE_HTML, op, serverScript);
+    const ev = lastShadow();
+    expect(ev).toMatchObject({ op: "gsap_fidelity", dispatched: true });
+    expect(ev?.mismatchCount as number).toBeGreaterThan(0);
+  });
+});
+
+describe("resolveGsapFidelityArgs (chokepoint wiring)", () => {
+  const op: ShadowGsapOp = { kind: "remove", animationId: "a-1" };
+  const session = {} as object;
+
+  it("returns narrowed args when session, op, before, and serverScript are all present", () => {
+    expect(resolveGsapFidelityArgs(session, op, "<html>before</html>", "tl.to(...)")).toEqual({
+      before: "<html>before</html>",
+      op,
+      serverScript: "tl.to(...)",
+    });
+  });
+
+  it("returns null when no session (shadow not wired)", () => {
+    expect(resolveGsapFidelityArgs(null, op, "before", "script")).toBeNull();
+  });
+
+  it("returns null when no shadowGsapOp (non-meta edit, e.g. property/keyframe)", () => {
+    expect(resolveGsapFidelityArgs(session, undefined, "before", "script")).toBeNull();
+  });
+
+  it("returns null when serverScript is null (composition has no GSAP script)", () => {
+    expect(resolveGsapFidelityArgs(session, op, "before", null)).toBeNull();
+  });
+
+  it("returns null when before is null", () => {
+    expect(resolveGsapFidelityArgs(session, op, null, "script")).toBeNull();
   });
 });
