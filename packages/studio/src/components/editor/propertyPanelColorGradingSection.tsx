@@ -43,14 +43,6 @@ const DEFAULT_COLOR_GRADING: NormalizedHfColorGrading = {
   colorSpace: HF_COLOR_GRADING_COLOR_SPACE,
 };
 
-interface ColorGradingCompareState {
-  enabled: boolean;
-}
-
-const DEFAULT_COMPARE: ColorGradingCompareState = {
-  enabled: false,
-};
-
 const COLOR_GRADING_DATA_KEY = HF_COLOR_GRADING_ATTR.replace(/^data-/, "");
 
 type RuntimeColorGradingStatusState = "missing" | "inactive" | "pending" | "active" | "unavailable";
@@ -59,16 +51,6 @@ interface RuntimeColorGradingStatus {
   state: RuntimeColorGradingStatusState;
   message: string;
 }
-
-type RuntimeColorGradingWindow = Window & {
-  __hf?: {
-    colorGrading?: {
-      getStatus?: (
-        target: HfColorGradingTarget | string | null | undefined,
-      ) => RuntimeColorGradingStatus;
-    };
-  };
-};
 
 export function isColorGradingCapableElement(element: DomEditSelection): boolean {
   return element.tagName === "video" || element.tagName === "img";
@@ -83,13 +65,8 @@ function readColorGradingFromElement(element: DomEditSelection): NormalizedHfCol
 
 function toBridgeColorGrading(grading: NormalizedHfColorGrading): unknown {
   if (!isHfColorGradingActive(grading)) return null;
-  return {
-    preset: grading.preset,
-    intensity: grading.intensity,
-    adjust: grading.adjust,
-    lut: grading.lut,
-    colorSpace: grading.colorSpace,
-  };
+  const { enabled: _enabled, ...bridgeGrading } = grading;
+  return bridgeGrading;
 }
 
 function readRuntimeColorGradingStatus(
@@ -97,7 +74,18 @@ function readRuntimeColorGradingStatus(
   target: HfColorGradingTarget,
 ): RuntimeColorGradingStatus {
   try {
-    const win = iframe?.contentWindow as RuntimeColorGradingWindow | null | undefined;
+    const win = iframe?.contentWindow as
+      | (Window & {
+          __hf?: {
+            colorGrading?: {
+              getStatus?: (
+                target: HfColorGradingTarget | string | null | undefined,
+              ) => RuntimeColorGradingStatus;
+            };
+          };
+        })
+      | null
+      | undefined;
     const status = win?.__hf?.colorGrading?.getStatus?.(target);
     return status ?? { state: "pending", message: "Waiting for runtime" };
   } catch {
@@ -140,12 +128,10 @@ function HoldBeforeButton({
       onHoldChange(false);
       window.removeEventListener("pointerup", release);
       window.removeEventListener("pointercancel", release);
-      window.removeEventListener("mouseup", release);
       window.removeEventListener("blur", release);
     };
     window.addEventListener("pointerup", release);
     window.addEventListener("pointercancel", release);
-    window.addEventListener("mouseup", release);
     window.addEventListener("blur", release);
   };
   const stopHold = (event: ReactPointerEvent<HTMLButtonElement>) => {
@@ -203,7 +189,7 @@ export function ColorGradingSection({
   onSetAttributeLive: (attr: string, value: string | null) => void | Promise<void>;
 }) {
   const [grading, setGrading] = useState(() => readColorGradingFromElement(element));
-  const [compare, setCompare] = useState<ColorGradingCompareState>(DEFAULT_COMPARE);
+  const [compareEnabled, setCompareEnabled] = useState(false);
   const [runtimeStatus, setRuntimeStatus] = useState<RuntimeColorGradingStatus>(() => ({
     state: "pending",
     message: "Waiting for runtime",
@@ -211,9 +197,9 @@ export function ColorGradingSection({
   const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingPersistValueRef = useRef<string | null | undefined>(undefined);
   const onSetAttributeLiveRef = useRef(onSetAttributeLive);
-  const compareRef = useRef(compare);
+  const compareEnabledRef = useRef(compareEnabled);
   onSetAttributeLiveRef.current = onSetAttributeLive;
-  compareRef.current = compare;
+  compareEnabledRef.current = compareEnabled;
   const target = useMemo(
     (): HfColorGradingTarget => ({
       id: element.id ?? null,
@@ -223,30 +209,14 @@ export function ColorGradingSection({
     }),
     [element.hfId, element.id, element.selector, element.selectorIndex],
   );
-  const targetKey = useMemo(
-    () =>
-      [
-        target.id ?? "",
-        target.hfId ?? "",
-        target.selector ?? "",
-        String(target.selectorIndex ?? ""),
-      ].join("|"),
-    [target],
-  );
-  const colorGradingAttribute = element.dataAttributes[COLOR_GRADING_DATA_KEY] ?? "";
 
   const refreshRuntimeStatus = useCallback(() => {
     setRuntimeStatus(readRuntimeColorGradingStatus(previewIframeRef?.current, target));
   }, [previewIframeRef, target]);
 
   useEffect(() => {
-    setGrading(normalizeHfColorGrading(colorGradingAttribute) ?? DEFAULT_COLOR_GRADING);
     refreshRuntimeStatus();
-  }, [element, colorGradingAttribute, refreshRuntimeStatus]);
-
-  useEffect(() => {
-    setCompare(DEFAULT_COMPARE);
-  }, [targetKey]);
+  }, [refreshRuntimeStatus]);
 
   useEffect(() => {
     const iframe = previewIframeRef?.current;
@@ -289,7 +259,7 @@ export function ColorGradingSection({
   );
 
   const postCompare = useCallback(
-    (nextCompare: ColorGradingCompareState) => {
+    (enabled: boolean) => {
       previewIframeRef?.current?.contentWindow?.postMessage(
         {
           source: "hf-parent",
@@ -297,7 +267,7 @@ export function ColorGradingSection({
           action: "set-color-grading-compare",
           target,
           compare: {
-            enabled: nextCompare.enabled,
+            enabled,
             position: 1,
             lineWidth: 0,
           },
@@ -310,48 +280,45 @@ export function ColorGradingSection({
 
   useEffect(
     () => () => {
-      postCompare({ ...DEFAULT_COMPARE, enabled: false });
+      postCompare(false);
     },
     [postCompare],
   );
 
-  const commitColorGrading = (nextGrading: NormalizedHfColorGrading) => {
-    setGrading(nextGrading);
-    setRuntimeStatus({ state: "pending", message: "Updating shader" });
-    postColorGrading(nextGrading);
-    const active = isHfColorGradingActive(nextGrading);
-    if (compareRef.current.enabled) {
-      postCompare({
-        ...compareRef.current,
-        enabled: active,
-      });
-      if (!active) setCompare(DEFAULT_COMPARE);
-    }
-    window.setTimeout(refreshRuntimeStatus, 50);
-    if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
-    pendingPersistValueRef.current = isHfColorGradingActive(nextGrading)
-      ? serializeHfColorGrading(nextGrading)
-      : null;
-    persistTimerRef.current = setTimeout(() => {
-      const value = pendingPersistValueRef.current;
-      pendingPersistValueRef.current = undefined;
-      void onSetAttributeLive(COLOR_GRADING_DATA_KEY, value ?? null);
-    }, 350);
-  };
+  const commitColorGrading = useCallback(
+    (nextGrading: NormalizedHfColorGrading) => {
+      setGrading(nextGrading);
+      setRuntimeStatus({ state: "pending", message: "Updating shader" });
+      postColorGrading(nextGrading);
+      const active = isHfColorGradingActive(nextGrading);
+      if (compareEnabledRef.current) {
+        postCompare(active);
+        if (!active) setCompareEnabled(false);
+      }
+      window.setTimeout(refreshRuntimeStatus, 50);
+      if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
+      pendingPersistValueRef.current = isHfColorGradingActive(nextGrading)
+        ? serializeHfColorGrading(nextGrading)
+        : null;
+      persistTimerRef.current = setTimeout(() => {
+        const value = pendingPersistValueRef.current;
+        pendingPersistValueRef.current = undefined;
+        void onSetAttributeLive(COLOR_GRADING_DATA_KEY, value ?? null);
+      }, 350);
+    },
+    [onSetAttributeLive, postColorGrading, postCompare, refreshRuntimeStatus],
+  );
 
-  const resetColorGrading = () => {
+  const resetColorGrading = useCallback(() => {
     commitColorGrading(DEFAULT_COLOR_GRADING);
-  };
+  }, [commitColorGrading]);
 
   const commitCompare = useCallback(
-    (nextCompare: ColorGradingCompareState) => {
-      const active = isHfColorGradingActive(grading);
-      const normalized = {
-        enabled: nextCompare.enabled && active,
-      };
-      setCompare(normalized);
-      if (normalized.enabled) postColorGrading(grading);
-      postCompare(normalized);
+    (enabled: boolean) => {
+      const nextEnabled = enabled && isHfColorGradingActive(grading);
+      setCompareEnabled(nextEnabled);
+      if (nextEnabled) postColorGrading(grading);
+      postCompare(nextEnabled);
       window.setTimeout(refreshRuntimeStatus, 50);
     },
     [grading, postColorGrading, postCompare, refreshRuntimeStatus],
@@ -364,9 +331,9 @@ export function ColorGradingSection({
       accessory={
         <div className="flex min-w-0 items-center gap-1.5">
           <HoldBeforeButton
-            active={compare.enabled}
+            active={compareEnabled}
             disabled={!isHfColorGradingActive(grading)}
-            onHoldChange={(holding) => commitCompare({ enabled: holding })}
+            onHoldChange={commitCompare}
           />
           <StatusPill status={runtimeStatus} />
           <button

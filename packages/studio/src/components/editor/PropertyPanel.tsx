@@ -366,6 +366,12 @@ export const PropertyPanel = memo(function PropertyPanel({
 
         {STUDIO_COLOR_GRADING_ENABLED && isColorGradingCapableElement(element) && (
           <ColorGradingSection
+            key={[
+              element.id ?? "",
+              element.hfId ?? "",
+              element.selector ?? "",
+              String(element.selectorIndex ?? ""),
+            ].join("|")}
             element={element}
             assets={assets}
             previewIframeRef={previewIframeRef}

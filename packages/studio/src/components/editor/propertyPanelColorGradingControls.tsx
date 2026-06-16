@@ -41,19 +41,6 @@ const SLIDERS: Array<{
   { key: "saturation", label: "Saturation", min: -100, max: 100, step: 1, scale: 100, suffix: "%" },
 ];
 
-function formatPercent(value: number): string {
-  return `${Math.round(value)}%`;
-}
-
-function formatExposure(value: number): string {
-  const stops = value / 100;
-  return `${stops > 0 ? "+" : ""}${stops.toFixed(2)}`;
-}
-
-function fileLabel(path: string): string {
-  return path.split("/").pop() ?? path;
-}
-
 function clampNumber(value: number, min: number, max: number): number {
   if (!Number.isFinite(value)) return min;
   return Math.min(max, Math.max(min, value));
@@ -68,17 +55,6 @@ function parseNumericInput(value: string, scale: number): number | null {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return null;
   return parsed * scale;
-}
-
-function buildSliderTicks(min: number, max: number, neutral: number): number[] {
-  const span = max - min;
-  if (span <= 0) return [];
-  const step = span <= 200 ? 50 : span / 4;
-  const ticks = new Set<number>([min, max, neutral]);
-  for (let value = min; value <= max + step / 2; value += step) {
-    ticks.add(Math.round(value));
-  }
-  return Array.from(ticks).sort((a, b) => a - b);
 }
 
 function tickPercent(value: number, min: number, max: number): number {
@@ -186,7 +162,7 @@ function ColorGradingSliderControl({
   const neutralPercent = range === 0 ? 0 : ((neutral - min) / range) * 100;
   const fillLeft = Math.min(valuePercent, neutralPercent);
   const fillWidth = Math.abs(valuePercent - neutralPercent);
-  const ticks = buildSliderTicks(min, max, neutral);
+  const ticks = Array.from(new Set([min, neutral, max])).sort((a, b) => a - b);
 
   return (
     <div className="grid min-w-0 gap-1.5 rounded-md bg-panel-input/30 p-2">
@@ -237,6 +213,7 @@ function ColorGradingSliderControl({
           step={step}
           value={draft}
           disabled={disabled}
+          aria-label={label}
           onChange={(event) => scheduleCommit(Number(event.currentTarget.value))}
           onMouseUp={() => commitDraft(draft)}
           onTouchEnd={() => commitDraft(draft)}
@@ -323,7 +300,7 @@ export function ColorGradingControls({
     [assets],
   );
   const selectedLut = grading.lut?.src ?? "";
-  const selectedProjectLut = selectedLut ? fileLabel(selectedLut) : null;
+  const selectedProjectLut = selectedLut ? (selectedLut.split("/").pop() ?? selectedLut) : null;
 
   const applyPreset = (preset: string) => {
     const next = normalizeHfColorGrading({ preset, intensity: 1 }) ?? defaultColorGrading;
@@ -384,7 +361,7 @@ export function ColorGradingControls({
               <optgroup label="Uploaded LUTs">
                 {lutAssets.map((asset) => (
                   <option key={asset} value={asset}>
-                    {fileLabel(asset)}
+                    {asset.split("/").pop() ?? asset}
                   </option>
                 ))}
               </optgroup>
@@ -434,7 +411,7 @@ export function ColorGradingControls({
               step={1}
               neutral={0}
               suffix="%"
-              displayValue={formatPercent((grading.lut.intensity ?? 1) * 100)}
+              displayValue={`${Math.round((grading.lut.intensity ?? 1) * 100)}%`}
               onCommit={updateLutIntensity}
               onReset={() => updateLutIntensity(100)}
             />
@@ -443,14 +420,14 @@ export function ColorGradingControls({
       </div>
 
       <div className="grid min-w-0 grid-cols-2 gap-3">
-        {SLIDERS.map((slider) => {
+        {SLIDERS.map((slider, index) => {
           const value = grading.adjust[slider.key] * slider.scale;
           const isExposure = slider.key === "exposure";
           return (
             <div
               key={slider.key}
               className={
-                SLIDERS.length % 2 === 1 && slider.key === "saturation" ? "col-span-2" : ""
+                SLIDERS.length % 2 === 1 && index === SLIDERS.length - 1 ? "col-span-2" : ""
               }
             >
               <ColorGradingSliderControl
@@ -462,7 +439,11 @@ export function ColorGradingControls({
                 neutral={0}
                 scale={isExposure ? 100 : 1}
                 suffix={isExposure ? "" : slider.suffix}
-                displayValue={isExposure ? formatExposure(value) : formatPercent(value)}
+                displayValue={
+                  isExposure
+                    ? `${value > 0 ? "+" : ""}${(value / 100).toFixed(2)}`
+                    : `${Math.round(value)}%`
+                }
                 onCommit={(next) => {
                   onCommitColorGrading({
                     ...grading,
